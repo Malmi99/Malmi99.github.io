@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Malmi Imasha — Fullstack Engineer</title>
+<meta name="description" content="Fullstack Software Engineer. Java · Spring Boot · React · TypeScript." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,30..100,0..1&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F4F1EA;
+  --bg-elev: #FFFFFF;
+  --bg-contrast: #0E0E10;
+  --ink: #0E0E10;
+  --ink-soft: #2A2A2E;
+  --ink-muted: #6B6B6B;
+  --line: #DDD6C5;
+  --line-strong: #A89E83;
+  --accent: #C5311A;
+  --accent-2: #1B3A4B;
+  --highlight: #F2C94C;
+  --noise-opacity: 0.05;
+}
+
+[data-theme="dark"] {
+  --bg: #0E0E10;
+  --bg-elev: #18181C;
+  --bg-contrast: #F4F1EA;
+  --ink: #F4F1EA;
+  --ink-soft: #D4D0C5;
+  --ink-muted: #8A8A8A;
+  --line: #2A2A30;
+  --line-strong: #4A4A52;
+  --accent: #FF6B47;
+  --accent-2: #5FA8D3;
+  --highlight: #F2C94C;
+  --noise-opacity: 0.08;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  font-size: 17px;
+  letter-spacing: -0.005em;
+  transition: background 0.5s ease, color 0.5s ease;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+[data-theme="dark"] body::before { mix-blend-mode: overlay; }
+
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.2s ease;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+@media (hover: hover) { .cursor { display: block; } }
+.cursor.hover-active { width: 60px; height: 60px; background: var(--highlight); }
+
+h1, h2, h3, h4 {
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  color: var(--ink);
+  font-variation-settings: "SOFT" 50, "WONK" 0, "opsz" 144;
+}
+
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--accent); color: var(--bg); }
+
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 56px);
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 22px 0;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, padding 0.3s ease;
+}
+.nav.scrolled { border-bottom-color: var(--line); padding: 14px 0; }
+
+.nav-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 56px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  position: relative;
+  padding-left: 24px;
+}
+.nav-logo::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+  50% { transform: translateY(-50%) scale(1.15); opacity: 0.7; }
+}
+
+.nav-links { display: flex; gap: 36px; align-items: center; }
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  position: relative;
+  transition: color 0.2s ease;
+}
+.nav-links a::before {
+  content: '';
+  position: absolute;
+  left: -14px; top: 50%;
+  transform: translateY(-50%);
+  width: 5px; height: 1px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::before { opacity: 1; }
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 0.3s ease;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); transform: rotate(20deg); }
+.theme-toggle svg { width: 16px; height: 16px; }
+.theme-toggle .sun { display: none; }
+[data-theme="dark"] .theme-toggle .sun { display: block; }
+[data-theme="dark"] .theme-toggle .moon { display: none; }
+
+@media (max-width: 760px) {
+  .nav-links a:not(.theme-link) { display: none; }
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  padding-top: 130px;
+  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.ticker {
+  position: absolute;
+  top: 84px;
+  left: 0; right: 0;
+  overflow: hidden;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.ticker-track {
+  display: flex;
+  gap: 50px;
+  animation: ticker 28s linear infinite;
+  width: max-content;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-muted);
+}
+.ticker-track span { display: flex; align-items: center; gap: 50px; white-space: nowrap; }
+.ticker-track .tdot { width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.hero-meta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  margin-top: 30px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hero-meta-top .num { color: var(--accent); }
+
+.hero-headline {
+  font-size: clamp(3rem, 11vw, 9.5rem);
+  font-weight: 300;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  line-height: 0.92;
+  margin-bottom: 50px;
+  letter-spacing: -0.045em;
+}
+
+.hero-headline .line { display: block; overflow: hidden; padding: 0.04em 0; }
+.hero-headline .word { display: inline-block; animation: word-rise 1s cubic-bezier(.16,1,.3,1) backwards; }
+.hero-headline .word:nth-child(1) { animation-delay: 0.1s; }
+.hero-headline .word:nth-child(2) { animation-delay: 0.2s; }
+.hero-headline .word:nth-child(3) { animation-delay: 0.3s; }
+.hero-headline .word:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes word-rise {
+  from { transform: translateY(110%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.hero-headline .accent {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  position: relative;
+  padding: 0 0.1em;
+}
+.hero-headline .accent::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: 0.1em;
+  width: 100%; height: 0.32em;
+  background: var(--highlight);
+  z-index: -1;
+  opacity: 0.55;
+  transform: skewX(-4deg);
+}
+
+.hero-lower {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(40px, 6vw, 90px);
+  align-items: end;
+  animation: fade-up 1s 0.8s cubic-bezier(.16,1,.3,1) backwards;
+}
+
+.hero-bio {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.3rem, 1.8vw, 1.65rem);
+  line-height: 1.4;
+  color: var(--ink-soft);
+  max-width: 620px;
+  font-weight: 400;
+}
+.hero-bio em { font-style: italic; color: var(--accent); }
+.hero-bio strong { font-weight: 500; color: var(--ink); font-style: normal; font-family: 'Fraunces', serif; }
+
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 30px;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 100px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  transition: all 0.35s cubic-bezier(.16,1,.3,1);
+  border: 1px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.hero-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+  z-index: -1;
+}
+.hero-cta:hover::before { transform: translateY(0); }
+.hero-cta:hover { border-color: var(--accent); }
+.hero-cta .arrow {
+  transition: transform 0.35s cubic-bezier(.16,1,.3,1);
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.2em;
+}
+.hero-cta:hover .arrow { transform: translate(4px, -2px) rotate(-10deg); }
+
+.hero-quick {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 2;
+}
+.hero-quick span {
+  color: var(--ink);
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.4em;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+@media (max-width: 820px) {
+  .hero-lower { grid-template-columns: 1fr; gap: 36px; }
+}
+
+/* Section common */
+.section-marker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 36px;
+}
+.section-marker .num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 2.2rem;
+  color: var(--accent);
+  font-variation-settings: "WONK" 1;
+  line-height: 1;
+}
+
+.section-title {
+  font-size: clamp(2.4rem, 6.5vw, 5.5rem);
+  font-weight: 300;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 32px;
+  max-width: 1000px;
+}
+.section-title em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.section-lead {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 720px;
+  margin-bottom: 70px;
+}
+
+/* ABOUT */
+.about { padding: clamp(120px, 16vw, 200px) 0 100px; }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(50px, 7vw, 100px);
+  align-items: start;
+}
+
+.about-text { font-family: 'Instrument Serif', serif; }
+.about-text p {
+  margin-bottom: 28px;
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.about-text p:first-child::first-letter {
+  font-family: 'Fraunces', serif;
+  font-size: 5em;
+  float: left;
+  line-height: 0.85;
+  margin: 8px 12px 0 0;
+  color: var(--accent);
+  font-weight: 400;
+  font-variation-settings: "WONK" 1, "SOFT" 100;
+  font-style: italic;
+}
+.about-text p strong { color: var(--ink); font-family: 'Fraunces', serif; font-weight: 500; font-style: normal; }
+.about-text p em { color: var(--accent); }
+
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+  position: sticky;
+  top: 130px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding-left 0.4s cubic-bezier(.16,1,.3,1);
+  position: relative;
+}
+.stat-row::before {
+  content: '';
+  position: absolute;
+  left: -16px; top: 50%;
+  transform: translateY(-50%);
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.stat-row:hover { padding-left: 16px; }
+.stat-row:hover::before { opacity: 1; }
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+}
+
+.stat-value {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+  font-weight: 400;
+  font-variation-settings: "WONK" 1, "SOFT" 100;
+  color: var(--ink);
+  font-style: italic;
+}
+
+@media (max-width: 820px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-stats { position: static; }
+}
+
+/* PROJECTS */
+.projects { padding: clamp(100px, 14vw, 160px) 0; background: var(--bg-elev); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 70px;
+}
+
+.projects-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  line-height: 1.8;
+}
+.projects-meta strong { color: var(--accent); font-weight: 500; }
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  gap: 30px;
+  align-items: center;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  position: relative;
+  transition: padding 0.4s cubic-bezier(.16,1,.3,1);
+}
+.project-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: -1;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(.16,1,.3,1);
+}
+.project-row:hover { padding-left: 24px; padding-right: 24px; }
+.project-row:hover::before { transform: scaleX(1); }
+.project-row:hover .project-arrow { opacity: 1; transform: translate(0,0); }
+
+.project-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.1em;
+}
+
+.project-main { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.project-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  font-weight: 400;
+  font-variation-settings: "WONK" 1, "SOFT" 50;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--ink);
+  transition: color 0.3s ease;
+}
+.project-title em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  color: var(--accent);
+}
+.project-row:hover .project-title { color: var(--accent); }
+
+.project-desc {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 640px;
+  display: none;
+}
+.project-row.expanded .project-desc { display: block; animation: fade-up 0.5s ease backwards; }
+
+.project-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.project-tags span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.project-row:hover .project-tags span { border-color: var(--accent); color: var(--accent); }
+
+.project-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.project-arrow {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.8rem;
+  color: var(--accent);
+  opacity: 0;
+  transform: translate(-8px, 8px);
+  transition: all 0.4s cubic-bezier(.16,1,.3,1);
+}
+
+@media (max-width: 820px) {
+  .project-row { grid-template-columns: 50px 1fr; gap: 16px; padding: 26px 0; }
+  .project-tags, .project-year, .project-arrow { grid-column: 2; }
+  .project-row:hover { padding-left: 12px; padding-right: 12px; }
+}
+
+/* SKILLS */
+.skills { padding: clamp(100px, 14vw, 160px) 0 0; }
+
+.skills-table {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.skill-cat {
+  padding: 32px 50px 32px 0;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 400;
+  font-variation-settings: "WONK" 1, "SOFT" 50;
+  font-style: italic;
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+  min-width: 240px;
+}
+
+.skill-items {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.1rem;
+  color: var(--ink-soft);
+  line-height: 1.8;
+}
+
+.skill-items b {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.92em;
+  color: var(--ink);
+  transition: color 0.25s ease;
+  cursor: default;
+}
+.skill-items b:hover { color: var(--accent); }
+.skill-items b:not(:last-child)::after {
+  content: ' / ';
+  color: var(--ink-muted);
+  font-weight: 400;
+}
+
+@media (max-width: 820px) {
+  .skills-table { grid-template-columns: 1fr; }
+  .skill-cat { padding-bottom: 8px; border-bottom: none; padding-right: 0; }
+  .skill-items { padding-top: 8px; padding-bottom: 28px; }
+}
+
+.marquee {
+  margin-top: 100px;
+  padding: 36px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-contrast);
+  color: var(--bg);
+}
+.marquee-track {
+  display: flex;
+  gap: 60px;
+  animation: ticker 30s linear infinite;
+  width: max-content;
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 400;
+  white-space: nowrap;
+}
+.marquee-track span { display: flex; align-items: center; gap: 60px; }
+.marquee-track .mdot { width: 14px; height: 14px; background: var(--accent); border-radius: 50%; }
+
+/* CONTACT */
+.contact { padding: clamp(120px, 16vw, 200px) 0 100px; position: relative; }
+
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: clamp(40px, 6vw, 100px);
+  align-items: end;
+}
+
+.contact-title {
+  font-size: clamp(3rem, 9vw, 8rem);
+  font-weight: 300;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  margin-bottom: 28px;
+}
+.contact-title em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.contact-lead {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.25rem, 1.7vw, 1.55rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 580px;
+  margin-bottom: 40px;
+}
+
+.contact-channels {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+
+.contact-channel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding 0.4s cubic-bezier(.16,1,.3,1);
+}
+.contact-channel:hover { padding-left: 16px; padding-right: 16px; }
+.contact-channel:hover .ch-arrow { transform: translate(4px, -4px) rotate(-10deg); }
+
+.ch-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+
+.ch-value {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  color: var(--ink);
+}
+
+.ch-arrow {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--accent);
+  transition: transform 0.4s cubic-bezier(.16,1,.3,1);
+  margin-left: 16px;
+}
+
+@media (max-width: 820px) {
+  .contact-inner { grid-template-columns: 1fr; }
+}
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 36px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.footer-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 4vw, 56px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(.16,1,.3,1), transform 0.9s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">Malmi Imasha</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Work</a>
+      <a href="#skills">Stack</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-toggle theme-link" id="themeToggle" aria-label="Toggle theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Currently building healthcare software<span class="tdot"></span>Care Systems Inc.<span class="tdot"></span>Java · Spring Boot · React · TypeScript<span class="tdot"></span>Colombo, Sri Lanka<span class="tdot"></span>Est. 2021<span class="tdot"></span></span>
+      <span>Currently building healthcare software<span class="tdot"></span>Care Systems Inc.<span class="tdot"></span>Java · Spring Boot · React · TypeScript<span class="tdot"></span>Colombo, Sri Lanka<span class="tdot"></span>Est. 2021<span class="tdot"></span></span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero-meta-top">
+      <div>Portfolio <span class="num">/ 2026 Edition</span></div>
+      <div>Issue <span class="num">№ 01</span></div>
+    </div>
+
+    <h1 class="hero-headline">
+      <span class="line"><span class="word">Engineer.</span></span>
+      <span class="line"><span class="word">Crafts</span> <span class="word accent">thoughtful</span></span>
+      <span class="line"><span class="word">software,</span> <span class="word">end&nbsp;to&nbsp;end.</span></span>
+    </h1>
+
+    <div class="hero-lower">
+      <p class="hero-bio">
+        I'm <strong>Malmi Imasha</strong> — a fullstack engineer with around four years building production-grade systems
+        across <em>healthcare, telecom, and US enterprise SaaS</em>. I live where Java backends meet React frontends,
+        and I genuinely care about shipping software that holds up under real load.
+      </p>
+      <div class="hero-side">
+        <a href="#projects" class="hero-cta">See the work <span class="arrow">↗</span></a>
+        <div class="hero-quick">
+          Currently at <span>Care Systems Inc.</span><br/>
+          Specialising in <span>Java &amp; Spring Boot</span><br/>
+          Based in <span>Colombo, Sri Lanka</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-marker reveal">
+      <span class="num">01</span>
+      <span>— A short introduction</span>
+    </div>
+
+    <h2 class="section-title reveal">
+      Software that <em>actually works</em><br/>under real load.
+    </h2>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I've spent the last four years writing software that real people depend on — from telecom systems handling
+          mobile-number lifecycles for one of South Asia's largest operators, to a US enterprise document-signing
+          workflow, to my current work on a <strong>hospital management platform</strong> that clinicians use every day.
+        </p>
+        <p>
+          My natural home is the backend: <strong>Java, Spring Boot, REST APIs, microservices, PL/SQL,</strong> and the
+          infrastructure that keeps it all running — Docker, Kubernetes, Jenkins. But I'm just as comfortable on the
+          other side, building responsive React interfaces in TypeScript when a project needs an engineer who can own
+          a feature <em>end to end</em>.
+        </p>
+        <p>
+          I care about clean code, strong tests, and clear thinking. I'd rather ship one well-designed service than
+          five clever-but-fragile ones. Outside of work, I'm a published author at <strong>ICSOAC-23</strong> for an
+          AI-based crop recommendation system, and I'm currently learning German.
+        </p>
+      </div>
+
+      <div class="about-stats reveal">
+        <div class="stat-row">
+          <span class="stat-label">Years shipping</span>
+          <span class="stat-value">~04</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Industries</span>
+          <span class="stat-value">04</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Honours degree</span>
+          <span class="stat-value">2:1</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Published papers</span>
+          <span class="stat-value">01</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Coffee per day</span>
+          <span class="stat-value">∞</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <div class="container">
+    <div class="projects-header reveal">
+      <div>
+        <div class="section-marker">
+          <span class="num">02</span>
+          <span>— Selected work</span>
+        </div>
+        <h2 class="section-title">
+          Six builds. <em>Three industries.</em><br/>One stack mostly.
+        </h2>
+      </div>
+      <div class="projects-meta">
+        <strong>06</strong> Projects Featured<br/>
+        Click any row to expand
+      </div>
+    </div>
+
+    <div class="projects-list reveal">
+      <div class="project-row">
+        <div class="project-num">01 /</div>
+        <div class="project-main">
+          <div class="project-title">CareWare <em>— Hospital Management Platform</em></div>
+          <div class="project-desc">A fullstack platform serving clinicians and administrative staff — patient records, scheduling, clinical workflows, and role-based access for sensitive healthcare data. I own features end-to-end: backend service design, secure REST APIs, database schemas, and the React interfaces tailored for non-technical hospital staff.</div>
+        </div>
+        <div class="project-tags">
+          <span>Java Servlets</span><span>Spring Boot</span><span>React</span><span>PostgreSQL</span>
+        </div>
+        <div class="project-year">2025 — present</div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-row">
+        <div class="project-num">02 /</div>
+        <div class="project-main">
+          <div class="project-title">Dialog <em>— Number Lifecycle &amp; CRM</em></div>
+          <div class="project-desc">Spring Boot microservices managing mobile-number reservation, cancellation, and live status updates for Dialog Axiata, backed by Oracle PL/SQL procedures. Built REST APIs integrating CRM and Video Service Platform systems for the Dialog Viu entertainment product.</div>
+        </div>
+        <div class="project-tags">
+          <span>Java</span><span>Spring Boot</span><span>Oracle PL/SQL</span>
+        </div>
+        <div class="project-year">2023 — 2025</div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-row">
+        <div class="project-num">03 /</div>
+        <div class="project-main">
+          <div class="project-title">DocuSign <em>— Signing Workflow</em></div>
+          <div class="project-desc">An end-to-end document signing workflow for a US enterprise client — secure Spring Boot backend integrating DocuSign envelopes, paired with a React signer-flow UI. Designed for compliance, auditability, and a smooth signer experience.</div>
+        </div>
+        <div class="project-tags">
+          <span>Spring Boot</span><span>React</span><span>DocuSign API</span><span>Keycloak</span>
+        </div>
+        <div class="project-year">2024</div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-row">
+        <div class="project-num">04 /</div>
+        <div class="project-main">
+          <div class="project-title">Ceylon <em>— Tourism Web</em></div>
+          <div class="project-desc">A modern travel-discovery web app showcasing Sri Lankan destinations, itineraries, and local experiences. Built with React on the front-end and a Node.js / Express API for content delivery and search. Designed mobile-first with smooth transitions and accessible UI patterns.</div>
+        </div>
+        <div class="project-tags">
+          <span>React</span><span>Node.js</span><span>Express</span>
+        </div>
+        <div class="project-year">2024 — personal</div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-row">
+        <div class="project-num">05 /</div>
+        <div class="project-main">
+          <div class="project-title">Bandhana <em>— Matrimonial Platform</em></div>
+          <div class="project-desc">A matrimonial profile-matching platform inspired by traditional Sri Lankan marriage proposal flows. React interface for browsing and filtering profiles, with a Node.js / Express backend handling user accounts, match preferences, and secure profile data.</div>
+        </div>
+        <div class="project-tags">
+          <span>React</span><span>Node.js</span><span>Express</span><span>MongoDB</span>
+        </div>
+        <div class="project-year">2024 — personal</div>
+        <div class="project-arrow">↗</div>
+      </div>
+
+      <div class="project-row">
+        <div class="project-num">06 /</div>
+        <div class="project-main">
+          <div class="project-title">AgroBrain <em>— AI Crop Recommendation</em></div>
+          <div class="project-desc">Soil-acidity image classification system using CNN (VGG16) and ensemble models to recommend optimal crops for given soil conditions. Published at the International Conference on Service-Oriented Architectures and Computing (ICSOAC-23).</div>
+        </div>
+        <div class="project-tags">
+          <span>Python</span><span>CNN · VGG16</span><span>Ensemble Models</span>
+        </div>
+        <div class="project-year">2023 — research</div>
+        <div class="project-arrow">↗</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="skills" id="skills">
+  <div class="container">
+    <div class="section-marker reveal">
+      <span class="num">03</span>
+      <span>— Tools of the trade</span>
+    </div>
+
+    <h2 class="section-title reveal">The stack, <em>by category.</em></h2>
+
+    <p class="section-lead reveal">
+      Breadth comes from shipping real features across telecom, healthcare, and SaaS.
+      Depth lives in the Java &amp; Spring Boot ecosystem — that's where I'm most dangerous.
+    </p>
+
+    <div class="skills-table reveal">
+      <div class="skill-cat">Backend</div>
+      <div class="skill-items"><b>Java</b><b>Spring Boot</b><b>Spring MVC</b><b>Spring Data JPA</b><b>Spring Security</b><b>Servlets</b><b>Hibernate</b><b>REST APIs</b><b>Node.js</b><b>Express</b><b>GraphQL</b></div>
+
+      <div class="skill-cat">Frontend</div>
+      <div class="skill-items"><b>React</b><b>TypeScript</b><b>JavaScript ES6+</b><b>HTML5</b><b>CSS3</b><b>Responsive Design</b><b>Redux</b></div>
+
+      <div class="skill-cat">Cloud / DevOps</div>
+      <div class="skill-items"><b>Docker</b><b>Kubernetes</b><b>Jenkins CI/CD</b><b>AWS</b><b>Linux</b></div>
+
+      <div class="skill-cat">Databases</div>
+      <div class="skill-items"><b>Oracle PL/SQL</b><b>PostgreSQL</b><b>MySQL</b><b>MongoDB</b></div>
+
+      <div class="skill-cat">Testing</div>
+      <div class="skill-items"><b>JUnit 5</b><b>Mockito</b><b>Integration Testing</b><b>Postman</b><b>TDD</b></div>
+
+      <div class="skill-cat">Practice</div>
+      <div class="skill-items"><b>Agile · Scrum</b><b>Kanban</b><b>SOLID</b><b>Design Patterns</b><b>Pair Programming</b></div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Java<span class="mdot"></span>Spring Boot<span class="mdot"></span>React<span class="mdot"></span>TypeScript<span class="mdot"></span>Kubernetes<span class="mdot"></span>Docker<span class="mdot"></span>Microservices<span class="mdot"></span>PostgreSQL<span class="mdot"></span></span>
+      <span>Java<span class="mdot"></span>Spring Boot<span class="mdot"></span>React<span class="mdot"></span>TypeScript<span class="mdot"></span>Kubernetes<span class="mdot"></span>Docker<span class="mdot"></span>Microservices<span class="mdot"></span>PostgreSQL<span class="mdot"></span></span>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-marker reveal">
+      <span class="num">04</span>
+      <span>— Say hello</span>
+    </div>
+
+    <div class="contact-inner">
+      <div class="reveal">
+        <h2 class="contact-title">Let's build<br/><em>something good.</em></h2>
+        <p class="contact-lead">
+          I read every message. Reach out about engineering roles, interesting collaborations,
+          or just to talk about Java's place in 2026.
+        </p>
+      </div>
+
+      <div class="contact-channels reveal">
+        <a href="mailto:malmiimasha7@gmail.com" class="contact-channel">
+          <div>
+            <div class="ch-label">Email</div>
+            <div class="ch-value">malmiimasha7@gmail.com</div>
+          </div>
+          <span class="ch-arrow">↗</span>
+        </a>
+        <a href="https://www.linkedin.com/in/malmii" target="_blank" rel="noopener" class="contact-channel">
+          <div>
+            <div class="ch-label">LinkedIn</div>
+            <div class="ch-value">/in/malmii</div>
+          </div>
+          <span class="ch-arrow">↗</span>
+        </a>
+        <a href="https://github.com/Malmi99" target="_blank" rel="noopener" class="contact-channel">
+          <div>
+            <div class="ch-label">GitHub</div>
+            <div class="ch-value">/Malmi99</div>
+          </div>
+          <span class="ch-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 Malmi Imasha · Designed &amp; built in Colombo</div>
+    <div>Java · Spring · React · TS</div>
+  </div>
+</footer>
+
+<script>
+  const themeToggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const stored = localStorage.getItem('theme');
+  if (stored) html.setAttribute('data-theme', stored);
+  else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    html.setAttribute('data-theme', 'dark');
+  }
+  themeToggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  document.querySelectorAll('.project-row').forEach(row => {
+    row.addEventListener('click', () => row.classList.toggle('expanded'));
+  });
+
+  const cursor = document.getElementById('cursor');
+  if (window.matchMedia('(hover: hover)').matches) {
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .project-row').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
+    });
+  }
+
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    reveals.forEach(el => io.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      reveals.forEach(el => {
+        if (!el.classList.contains('visible') && el.getBoundingClientRect().top < window.innerHeight) {
+          el.classList.add('visible');
+        }
+      });
+    }, 100);
+  });
+</script>
+</body>
+</html>
